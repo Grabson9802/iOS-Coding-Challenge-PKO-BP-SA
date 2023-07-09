@@ -55,7 +55,7 @@ class MovieDetailScreen: UIViewController {
         }
         
         self.setFavoriteBarButtonState()
-        self.delegate?.didToggleFavorite(movie: movie)
+        self.delegate?.didToggleFavorite(movie: self.movie)
     }
     
     private func addSubviews() {

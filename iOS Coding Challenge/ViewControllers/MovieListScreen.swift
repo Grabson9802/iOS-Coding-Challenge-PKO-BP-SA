@@ -82,6 +82,27 @@ class MovieListScreen: UIViewController {
         
         return footerView
     }
+    
+    private func presentMovieDetailScreen(for indexPath: IndexPath) {
+        let movie: Movie
+        if self.isSearchBarActive {
+            movie = self.movieViewModel.searchedMovies[indexPath.row]
+        } else {
+            movie = self.movieViewModel.data.results[indexPath.row]
+        }
+        let movieDetailsViewModel = MovieDetailViewModel(apiService: self.apiService)
+        let isFavorite = self.movieViewModel.favoriteMovieIds.contains(movie.id)
+        
+        let viewControllerToPresent = MovieDetailScreen(movieDetailsViewModel: movieDetailsViewModel,
+                                                        movie: movie,
+                                                        isFavorite: isFavorite)
+        viewControllerToPresent.view.backgroundColor = UIColor.systemBackground
+        viewControllerToPresent.title = movie.original_title
+        viewControllerToPresent.delegate = self
+        
+        let navigationController = UINavigationController(rootViewController: viewControllerToPresent)
+        self.present(navigationController, animated: true)
+    }
 }
 
 extension MovieListScreen: UITableViewDataSource {
@@ -116,25 +137,7 @@ extension MovieListScreen: UITableViewDataSource {
         }
         
         cell.movieDetailsButtonTappedHandler = { [weak self] in
-            if let self = self {
-                if self.isSearchBarActive {
-                    movie = self.movieViewModel.searchedMovies[indexPath.row]
-                } else {
-                    movie = self.movieViewModel.data.results[indexPath.row]
-                }
-                let movieDetailsViewModel = MovieDetailViewModel(apiService: self.apiService)
-                let isFavorite = self.movieViewModel.favoriteMovieIds.contains(movie.id)
-                
-                let viewControllerToPresent = MovieDetailScreen(movieDetailsViewModel: movieDetailsViewModel,
-                                                                movie: movie,
-                                                                isFavorite: isFavorite)
-                viewControllerToPresent.view.backgroundColor = .systemBackground
-                viewControllerToPresent.title = movie.original_title
-                viewControllerToPresent.delegate = self
-
-                let navigationController = UINavigationController(rootViewController: viewControllerToPresent)
-                self.present(navigationController, animated: true)
-            }
+            self?.presentMovieDetailScreen(for: indexPath)
         }
         
         return cell
