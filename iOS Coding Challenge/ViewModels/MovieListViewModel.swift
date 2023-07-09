@@ -11,10 +11,11 @@ class MovieListViewModel {
     
     private let apiService: APIService
     private let favoriteMoviesManager: FavoriteMoviesManager
+    
     var data = MovieListResponse(page: 0, results: [], total_pages: 0)
     var searchedMovies = [Movie]()
     var favoriteMovieIds = Set<Int>()
-    var pageNumber = 0
+    var lastDownloadedPageNumber = 0
     
     init(apiService: APIService, favoriteMoviesManager: FavoriteMoviesManager) {
         self.apiService = apiService
@@ -48,10 +49,10 @@ class MovieListViewModel {
     }
     
     func downloadData(pagination: Bool = false, completion: (() -> Void)?) {
-        self.apiService.fetchData(pagination: pagination, page: self.pageNumber + 1) { [weak self] result in
+        self.apiService.fetchData(pagination: pagination, page: self.lastDownloadedPageNumber + 1) { [weak self] result in
             if let data = self?.handleResult(result: result) {
                 self?.data.results.append(contentsOf: data.results)
-                self?.pageNumber = data.page
+                self?.lastDownloadedPageNumber = data.page
                 completion?()
             }
         }

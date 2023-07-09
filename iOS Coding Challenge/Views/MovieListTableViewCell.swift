@@ -10,7 +10,7 @@ import UIKit
 class MovieListTableViewCell: UITableViewCell {
     static let identifier = "MovieListTableViewCell"
     
-    // UI's
+    // UIs
     private let movieDetailsButton = UIButton()
     let titleLabel = UILabel()
     let favoriteButton = UIButton()

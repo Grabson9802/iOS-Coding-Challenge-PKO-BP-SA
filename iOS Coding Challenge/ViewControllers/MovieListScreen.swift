@@ -10,12 +10,11 @@ import UIKit
 class MovieListScreen: UIViewController {
     
     private let apiService = APIService()
-    private let favoriteMoviesManager = FavoriteMoviesManager()
     private var movieViewModel: MovieListViewModel!
     private var isSearchBarActive = false
     private var isScrollViewTriggered = false
     
-    // UI's
+    // UIs
     private let tableView = UITableView(frame: .zero, style: .insetGrouped)
     private let searchBar = UISearchBar()
     private let spinner = UIActivityIndicatorView()
@@ -23,7 +22,9 @@ class MovieListScreen: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.movieViewModel = MovieListViewModel(apiService: self.apiService, favoriteMoviesManager: self.favoriteMoviesManager)
+        let favoriteMoviesManager = FavoriteMoviesManager()
+        self.movieViewModel = MovieListViewModel(apiService: self.apiService,
+                                                 favoriteMoviesManager: favoriteMoviesManager)
         self.movieViewModel.loadFavoriteMovieIds()
         self.movieViewModel.downloadData { [weak self] in
             DispatchQueue.main.async {
@@ -95,7 +96,7 @@ extension MovieListScreen: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: MovieListTableViewCell.identifier, for: indexPath) as! MovieListTableViewCell
         
-        let movie: Movie
+        var movie: Movie
         if self.isSearchBarActive {
             movie = self.movieViewModel.searchedMovies[indexPath.row]
         } else {
@@ -115,7 +116,6 @@ extension MovieListScreen: UITableViewDataSource {
         }
         
         cell.movieDetailsButtonTappedHandler = { [weak self] in
-            let movie: Movie
             if let self = self {
                 if self.isSearchBarActive {
                     movie = self.movieViewModel.searchedMovies[indexPath.row]
@@ -153,7 +153,7 @@ extension MovieListScreen: UITableViewDelegate {
 
 extension MovieListScreen: UIScrollViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        if !self.isSearchBarActive && !self.isScrollViewTriggered && self.movieViewModel.pageNumber != self.movieViewModel.data.total_pages {
+        if !self.isSearchBarActive && !self.isScrollViewTriggered && self.movieViewModel.lastDownloadedPageNumber != self.movieViewModel.data.total_pages {
             let position = scrollView.contentOffset.y
             if position > (self.tableView.contentSize.height - scrollView.frame.size.height) {
                 

@@ -7,6 +7,6 @@
 
 import Foundation
 
-protocol MovieDetailsScreenDelegate {
+protocol MovieDetailsScreenDelegate: AnyObject {
     func didToggleFavorite(movie: Movie)
 }

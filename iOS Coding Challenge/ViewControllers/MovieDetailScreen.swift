@@ -13,7 +13,7 @@ class MovieDetailScreen: UIViewController {
     private let movie: Movie
     private var isFavorite: Bool
     
-    // UI's
+    // UIs
     private let posterImageView = UIImageView()
     private let overviewLabel = UILabel()
     private let releaseDateLabel = UILabel()
@@ -22,7 +22,7 @@ class MovieDetailScreen: UIViewController {
     private let nonePosterLabel = UILabel()
     
     // Delegates
-    var delegate: MovieDetailsScreenDelegate?
+    weak var delegate: MovieDetailsScreenDelegate?
     
     init(movieDetailsViewModel: MovieDetailViewModel, movie: Movie, isFavorite: Bool) {
         
