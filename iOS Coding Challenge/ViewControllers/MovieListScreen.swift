@@ -18,6 +18,7 @@ class MovieListScreen: UIViewController {
     // UI's
     private let tableView = UITableView(frame: .zero, style: .insetGrouped)
     private let searchBar = UISearchBar()
+    private let spinner = UIActivityIndicatorView()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -74,10 +75,9 @@ class MovieListScreen: UIViewController {
     private func createSpinnerFooter() -> UIView {
         let footerView = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.size.width, height: 100))
         
-        let spinner = UIActivityIndicatorView()
-        spinner.center = footerView.center
-        footerView.addSubview(spinner)
-        spinner.startAnimating()
+        self.spinner.center = footerView.center
+        footerView.addSubview(self.spinner)
+        self.spinner.startAnimating()
         
         return footerView
     }
@@ -110,17 +110,8 @@ extension MovieListScreen: UITableViewDataSource {
         }
         
         cell.favoriteButtonTappedHandler = { [weak self] in
-            if let self = self {
-                let movieIsFavorited = self.movieViewModel.toggleFavoriteMovie(movie: movie)
-                
-                if movieIsFavorited {
-                    cell.favoriteButton.setImage(UIImage(systemName: "star.fill"), for: .normal)
-                    cell.favoriteButton.isSelected = true
-                } else {
-                    cell.favoriteButton.setImage(UIImage(systemName: "star"), for: .normal)
-                    cell.favoriteButton.isSelected = false
-                }
-            }
+            self?.movieViewModel.toggleFavoriteMovie(movie: movie)
+            self?.reloadTableView()
         }
         
         cell.movieDetailsButtonTappedHandler = { [weak self] in
@@ -131,16 +122,16 @@ extension MovieListScreen: UITableViewDataSource {
                 } else {
                     movie = self.movieViewModel.data.results[indexPath.row]
                 }
-                
                 let movieDetailsViewModel = MovieDetailViewModel(apiService: self.apiService)
+                let isFavorite = self.movieViewModel.favoriteMovieIds.contains(movie.id)
                 
                 let viewControllerToPresent = MovieDetailScreen(movieDetailsViewModel: movieDetailsViewModel,
                                                                 movie: movie,
-                                                                isFavorite: cell.favoriteButton.isSelected)
+                                                                isFavorite: isFavorite)
                 viewControllerToPresent.view.backgroundColor = .systemBackground
                 viewControllerToPresent.title = movie.original_title
                 viewControllerToPresent.delegate = self
-                
+
                 let navigationController = UINavigationController(rootViewController: viewControllerToPresent)
                 self.present(navigationController, animated: true)
             }
@@ -219,7 +210,7 @@ extension MovieListScreen: UISearchBarDelegate {
 
 extension MovieListScreen: MovieDetailsScreenDelegate {
     func didToggleFavorite(movie: Movie) {
-        let _ = self.movieViewModel.toggleFavoriteMovie(movie: movie)
+        self.movieViewModel.toggleFavoriteMovie(movie: movie)
         self.reloadTableView()
     }
 }

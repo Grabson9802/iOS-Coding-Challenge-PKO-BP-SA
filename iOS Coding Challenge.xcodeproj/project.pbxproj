@@ -79,6 +79,7 @@
 				661963962A59F31B00952914 /* Models */,
 				6619639B2A59F47A00952914 /* Views */,
 				661963A12A59F4DE00952914 /* ViewModels */,
+				66EBAD222A5AD19E00C7908E /* ViewControllers */,
 				661963A62A59F53000952914 /* Network */,
 				661963AB2A59F55D00952914 /* Protocols */,
 				661963952A59F30F00952914 /* AppDelegate */,
@@ -111,19 +112,9 @@
 		6619639B2A59F47A00952914 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				661963852A59F2FD00952914 /* MovieListScreen.swift */,
-				6619639C2A59F4B200952914 /* MovieDetailScreen.swift */,
-				661963A02A59F4D400952914 /* Cells */,
-			);
-			path = Views;
-			sourceTree = "<group>";
-		};
-		661963A02A59F4D400952914 /* Cells */ = {
-			isa = PBXGroup;
-			children = (
 				6619639E2A59F4CC00952914 /* MovieListTableViewCell.swift */,
 			);
-			path = Cells;
+			path = Views;
 			sourceTree = "<group>";
 		};
 		661963A12A59F4DE00952914 /* ViewModels */ = {
@@ -151,6 +142,15 @@
 				661963AE2A59F58900952914 /* FavoritesService.swift */,
 			);
 			path = Protocols;
+			sourceTree = "<group>";
+		};
+		66EBAD222A5AD19E00C7908E /* ViewControllers */ = {
+			isa = PBXGroup;
+			children = (
+				661963852A59F2FD00952914 /* MovieListScreen.swift */,
+				6619639C2A59F4B200952914 /* MovieDetailScreen.swift */,
+			);
+			path = ViewControllers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

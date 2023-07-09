@@ -9,8 +9,8 @@ import Foundation
 
 class MovieListViewModel {
     
-    private var apiService: APIService
-    private var favoriteMoviesManager: FavoriteMoviesManager
+    private let apiService: APIService
+    private let favoriteMoviesManager: FavoriteMoviesManager
     var data = MovieListResponse(page: 0, results: [], total_pages: 0)
     var searchedMovies = [Movie]()
     var favoriteMovieIds = Set<Int>()
@@ -21,16 +21,13 @@ class MovieListViewModel {
         self.favoriteMoviesManager = favoriteMoviesManager
     }
     
-    func toggleFavoriteMovie(movie: Movie) -> Bool {
+    func toggleFavoriteMovie(movie: Movie) {
         if self.favoriteMovieIds.contains(movie.id) {
             self.favoriteMovieIds.remove(movie.id)
-            self.saveFavoriteMovies()
-            return false
         } else {
             self.favoriteMovieIds.insert(movie.id)
-            self.saveFavoriteMovies()
-            return true
         }
+        self.saveFavoriteMovies()
     }
     
     func loadFavoriteMovieIds() {
